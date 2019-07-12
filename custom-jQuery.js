@@ -55,12 +55,29 @@ const removeClass = function (classes) {
     return this;
 };
 
+const append = function (...elements) {
+    while (elements.some((value) => typeof value[Symbol.iterator] === 'function' && typeof value !== 'string')) {
+        elements = elements.flat();
+    }
+    elements = elements.flat();
+    for (const each of this) {
+        for (const each_elem of elements) {
+            const elem = document.createElement(each_elem.substring(1, each_elem.indexOf('>')));
+            elem.innerHTML = each_elem.substring(each_elem.indexOf('>') + 1, each_elem.lastIndexOf('<'));
+            console.log(elem);
+            each.appendChild(elem);
+        }
+    }
+    return this;
+}
+
 function $(selector) {
     if (typeof selector === 'string') {
         let res = document.querySelectorAll(selector);
         let prot = Object.getPrototypeOf(res);
         prot.addClass = addClass.bind(res);
         prot.removeClass = removeClass.bind(res);
+        prot.append = append.bind(res);
         return res;
     }
     return null;
