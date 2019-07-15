@@ -1,30 +1,43 @@
 class JQuery {
     constructor(selector) {
-        this.selector = selector;
-        this.elements = document.querySelectorAll(selector);
+        const elements = document.querySelectorAll(selector);
+        for (let element in elements) {
+            if (elements.hasOwnProperty(element)) {
+                this[element] = elements[element];
+            }
+        }
+    }
+
+    [Symbol.iterator]() {
+        let index = -1;
+        return {
+            next: () => {
+                return { value: this[++index], done: !this.hasOwnProperty(index) }
+            }
+        }
     }
 
     addClass(classes) {
         if (typeof classes === 'string' || typeof classes === 'function') {
-            for (const each in this.elements) {
-                if (this.elements.hasOwnProperty(each)) {
+            for (const each in this) {
+                if (this.hasOwnProperty(each)) {
                     let addition;
                     if (typeof classes === 'function') {
-                        addition = classes(each, this.elements[each].className);
+                        addition = classes(each, this[each].className);
                     }
                     else {
                         addition = classes;
                     }
                     if (typeof addition === 'string') {
-                        if (this.elements[each].className) {
+                        if (this[each].className) {
                             for (const each_class of addition.split(' ')) {
-                                if (this.elements[each].className.indexOf(each_class) === -1) {
-                                    this.elements[each].className += ' ' + each_class;
+                                if (this[each].className.indexOf(each_class) === -1) {
+                                    this[each].className += ' ' + each_class;
                                 }
                             }
                         }
                         else {
-                            this.elements[each].className = addition;
+                            this[each].className = addition;
                         }
                     }
                 }
@@ -35,26 +48,26 @@ class JQuery {
 
     removeClass(classes) {
         if (typeof classes === 'string' || typeof classes === 'function') {
-            for (const each in this.elements) {
-                if (this.elements.hasOwnProperty(each)) {
+            for (const each in this) {
+                if (this.hasOwnProperty(each)) {
                     let removing;
                     if (typeof classes === 'function') {
-                        removing = classes(each, this.elements[each].className);
+                        removing = classes(each, this[each].className);
                     }
                     else {
                         removing = classes;
                     }
                     if (typeof removing === 'string') {
-                        if (this.elements[each].className) {
-                            this.elements[each].className += ' '
+                        if (this[each].className) {
+                            this[each].className += ' '
                             for (const each_class of removing.split(' ')) {
-                                if (this.elements[each].className.indexOf(each_class + ' ') !== -1) {
-                                    this.elements[each].className = this.elements[each].className.replace(each_class + ' ', '');
+                                if (this[each].className.indexOf(each_class + ' ') !== -1) {
+                                    this[each].className = this[each].className.replace(each_class + ' ', '');
                                 }
                             }
                         }
                     }
-                    this.elements[each].className = this.elements[each].className.trim();
+                    this[each].className = this[each].className.trim();
                 }
             }
         }
@@ -63,21 +76,21 @@ class JQuery {
 
     append(...elements) {
         if (elements.length === 1 && typeof elements[0] === 'function') {
-            for (const each in this.elements) {
-                if (this.elements.hasOwnProperty(each)) {
-                    elements[0](each, this.elements[each].innerHTML);
+            for (const each in this) {
+                if (this.hasOwnProperty(each)) {
+                    elements[0](each, this[each].innerHTML);
                 }
             }
         }
         elements = elements.flat();
-        for (const each of this.elements) {
+        for (const each of this) {
             console.log(each);
             for (const each_elem of elements) {
                 if (typeof each_elem === 'Element') {
                     each.appendChild(each_elem);
                 }
                 else if (each_elem instanceof JQuery) {
-                    for (let elem of each_elem.elements) {
+                    for (let elem of each_elem) {
                         each.appendChild(elem);
                     }
                 }
@@ -95,6 +108,32 @@ class JQuery {
         for (const element of elements) {
             element.parentNode.removeChild(element);
         }
+    }
+
+    text(param) {
+        if (param) {
+            if (typeof param === 'function') {
+                for (each in this) {
+                    if (this.hasOwnProperty(each)) {
+                        const new_text = param(each, each.innerHTML);
+                        if (new_text) {
+                            each.innerHTML = new_text;
+                        }
+                    }
+                }
+            }
+            else {
+                this.innerHTML = param;
+            }
+        }
+        else {
+            let res = '';
+            for (let each of this) {
+                res += each.innerHTML;
+            }
+            return res;
+        }
+        return this;
     }
 }
 
