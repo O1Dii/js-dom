@@ -1,10 +1,18 @@
 class JQuery {
-    constructor(selector) {
-        const elements = document.querySelectorAll(selector);
-        for (let element in elements) {
-            if (elements.hasOwnProperty(element)) {
-                this[element] = elements[element];
+    constructor(selector, elements) {
+        if (!elements) {
+            elements = document.querySelectorAll(selector);
+        }
+
+        if (typeof elements[Symbol.iterator] === 'function') {
+            for (let element in elements) {
+                if (elements.hasOwnProperty(element)) {
+                    this[element] = elements[element];
+                }
             }
+        }
+        else {
+            this[0] = elements;
         }
     }
 
@@ -17,7 +25,12 @@ class JQuery {
         }
     }
 
-    addClass(classes) {
+    last() {
+        const elem_key = Math.max(...Object.keys(this).map(Number));
+        return new JQuery(undefined, this[elem_key])
+    }
+
+    addClass(classes, hi) {
         if (typeof classes === 'string' || typeof classes === 'function') {
             for (const each in this) {
                 if (this.hasOwnProperty(each)) {
@@ -132,6 +145,74 @@ class JQuery {
                 res += each.innerHTML;
             }
             return res;
+        }
+        return this;
+    }
+
+    attr(attrName, value) {
+        if (typeof attrName === 'object' && attrName.constructor === Object && attrName.toString() === '[object Object]') {
+            for (let each in Object.keys(arrtName)) {
+                if (attrName.hasOwnProperty(each)) {
+                    for (each_elem of this) {
+                        each_elem.setAttribute(each, attrName[each]);
+                    }
+                }
+            }
+        }
+        else if (typeof attrName === 'string') {
+            if (value) {
+                let new_attr_value = value;
+                if (typeof value === 'function') {
+                    for (each_elem in this) {
+                        if (this.hasOwnProperty(each_elem)) {
+                            new_attr_value = value(each_elem, each_elem.getAttribute(attrName));
+                        }
+                    }
+                }
+                if (['string', 'number', 'null'].indexOf(typeof new_attr_value) !== -1) {
+                    if (new_attr_value) {
+                        for (const each_elem of this) {
+                            console.log(each_elem);
+                            each_elem.setAttribute(attrName, new_attr_value);
+                        }
+                    }
+                    else {
+                        for (const each_elem of this) {
+                            each_elem.removeAttribute(attrName);
+                        }
+                    }
+                }
+            }
+            else {
+                this.last().getAttribute(attrName);
+            }
+        }
+        return this;
+    }
+
+    children(selector) {
+        let elements = [];
+        let elem;
+        for (let each of this) {
+            if (selector) {
+                elem = each.querySelectorAll(selector);
+            }
+            else {
+                elem = each.children;
+            }
+            if (elem.length !== 0) {
+                for (const each_elem in elem) {
+                    if (elem.hasOwnProperty(each_elem))
+                        elements.push(elem[each_elem]);
+                }
+            }
+        }
+        return new JQuery(undefined, elements);
+    }
+
+    empty() {
+        for (let each of this) {
+            each.innerHTML = null;
         }
         return this;
     }
