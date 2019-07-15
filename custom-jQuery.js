@@ -151,11 +151,9 @@ class JQuery {
 
     attr(attrName, value) {
         if (typeof attrName === 'object' && attrName.constructor === Object && attrName.toString() === '[object Object]') {
-            for (let each in Object.keys(arrtName)) {
-                if (attrName.hasOwnProperty(each)) {
-                    for (each_elem of this) {
-                        each_elem.setAttribute(each, attrName[each]);
-                    }
+            for (let each of Object.keys(attrName)) {
+                for (each_elem of this) {
+                    each_elem.setAttribute(each, attrName[each]);
                 }
             }
         }
@@ -184,7 +182,7 @@ class JQuery {
                 }
             }
             else {
-                this.last().getAttribute(attrName);
+                return this.last()[0].getAttribute(attrName);
             }
         }
         return this;
@@ -213,6 +211,38 @@ class JQuery {
     empty() {
         for (let each of this) {
             each.innerHTML = null;
+        }
+        return this;
+    }
+
+    css(propertyName, value) {
+        if (typeof propertyName === 'object' && propertyName.constructor === Object && propertyName.toString() === '[object Object]') {
+            for (let each of Object.keys(propertyName)) {
+                for (const each_elem of this) {
+                    each_elem.style.setProperty(each, propertyName[each]);
+                }
+            }
+        }
+        else if (typeof propertyName === 'string') {
+            if (value) {
+                let new_attr_value = value;
+                if (typeof value === 'function') {
+                    for (each_elem in this) {
+                        if (this.hasOwnProperty(each_elem)) {
+                            new_attr_value = value(each_elem, each_elem.style.getProperty(propertyName));
+                        }
+                    }
+                }
+                if (['string', 'number'].indexOf(typeof new_attr_value) !== -1) {
+                    for (const each_elem of this) {
+                        console.log(each_elem);
+                        each_elem.style.setProperty(propertyName, new_attr_value);
+                    }
+                }
+            }
+            else {
+                return this.last()[0].style.getPropertyValue(propertyName);
+            }
         }
         return this;
     }
