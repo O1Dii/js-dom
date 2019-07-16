@@ -2,7 +2,8 @@ import JQuery from './JQuery/JQuery';
 
 function $(selector) {
     if (typeof selector === 'string') {
-        return new JQuery(selector);
+        const res = new JQuery(selector);
+        return res;
     }
     return null;
 }

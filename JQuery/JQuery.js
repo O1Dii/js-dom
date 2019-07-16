@@ -1,6 +1,9 @@
-import addClass from './JQuery/addClass';
-import removeClass from './JQuery/removeClass';
-import each from './JQuery/each';
+import each from './each';
+import addClass from './addClass';
+import removeClass from './removeClass';
+import append from './append';
+import remove from './remove';
+
 
 class JQuery {
     constructor(selector, elements) {
@@ -28,8 +31,10 @@ class JQuery {
     }
 }
 
+JQuery.prototype.each = each;
 JQuery.prototype.addClass = addClass;
 JQuery.prototype.removeClass = removeClass;
-JQuery.prototype.each = each;
+JQuery.prototype.append = append;
+JQuery.prototype.remove = remove;
 
 export default JQuery;

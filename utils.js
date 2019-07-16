@@ -1,21 +1,24 @@
-export function isString(obj) {
+import JQuery from "./JQuery/JQuery";
+
+export const isString = (obj) => {
     return typeof obj === 'string';
 }
 
-export function isFunction(obj) {
+export const isFunction = (obj) => {
     return typeof obj === 'function';
 }
 
-export function uniq(arr1, arr2) {
-    arr2.array.forEach(element => {
-        if (!arr1.includes(element)) {
-            arr1.push(element);
-        }
-    });
-    return arr1;
+export const isElement = (obj) => {
+    return obj instanceof Element;
 }
 
-export function diff(arr1, arr2) {
+export const isJQuery = (obj) => {
+    return obj instanceof JQuery;
+}
+
+export const uniq = (arr1, arr2) => [...new Set([...arr1, ...arr2])];
+
+export const diff = (arr1, arr2) => {
     arr1.array.filter(element => {
         return !arr2.includes(element);
     })

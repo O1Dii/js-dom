@@ -117,8 +117,36 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+})({"JQuery/each.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var each = function each(fn) {
+  console.log(this);
+
+  for (var _i = 0, _Object$keys = Object.keys(this); _i < _Object$keys.length; _i++) {
+    var index = _Object$keys[_i];
+    fn(this[index], index);
+  }
+};
+
+var _default = each;
+exports.default = _default;
+},{}],"utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.diff = exports.uniq = exports.isJQuery = exports.isElement = exports.isFunction = exports.isString = void 0;
+
+var _JQuery = _interopRequireDefault(require("./JQuery/JQuery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -128,15 +156,199 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
+var isString = function isString(obj) {
+  return typeof obj === 'string';
+};
+
+exports.isString = isString;
+
+var isFunction = function isFunction(obj) {
+  return typeof obj === 'function';
+};
+
+exports.isFunction = isFunction;
+
+var isElement = function isElement(obj) {
+  return obj instanceof Element;
+};
+
+exports.isElement = isElement;
+
+var isJQuery = function isJQuery(obj) {
+  return obj instanceof _JQuery.default;
+};
+
+exports.isJQuery = isJQuery;
+
+var uniq = function uniq(arr1, arr2) {
+  return _toConsumableArray(new Set([].concat(_toConsumableArray(arr1), _toConsumableArray(arr2))));
+};
+
+exports.uniq = uniq;
+
+var diff = function diff(arr1, arr2) {
+  arr1.array.filter(function (element) {
+    return !arr2.includes(element);
+  });
+};
+
+exports.diff = diff;
+},{"./JQuery/JQuery":"JQuery/JQuery.js"}],"JQuery/addClass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = require("../utils");
+
+var addClass = function addClass(classes) {
+  if (!(0, _utils.isString)(classes) && !(0, _utils.isFunction)(classes)) {
+    return this;
+  }
+
+  this.each(function (item, index) {
+    var newClasses = (0, _utils.isFunction)(classes) ? classes(index, item.className) : classes;
+
+    if (!(0, _utils.isString)(newClasses)) {
+      return;
+    }
+
+    if (item.className) {
+      var existClasses = item.className.split(' ').filter(function (className) {
+        return className;
+      });
+      item.className = (0, _utils.uniq)(existClasses, newClasses.split(' ')).join(' ');
+    } else {
+      item.className = newClasses;
+    }
+  });
+  return this;
+};
+
+var _default = addClass;
+exports.default = _default;
+},{"../utils":"utils.js"}],"JQuery/removeClass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = require("../utils");
+
+var removeClass = function removeClass(classes) {
+  if (!(0, _utils.isString)(classes) && !(0, _utils.isFunction)(classes)) {
+    return this;
+  }
+
+  this.each(function (item, index) {
+    var toRemoveClasses = (0, _utils.isFunction)(classes) ? classes(index, item.className) : classes;
+
+    if (!(0, _utils.isString)(toRemoveClasses)) {
+      return;
+    }
+
+    if (item.className) {
+      var existClasses = item.className.split(' ').filter(function (className) {
+        return className;
+      });
+      item.className = (0, _utils.diff)(existClasses, toRemoveClasses.split(' ')).join(' ');
+    }
+
+    item.className = item.className.trim();
+  });
+  return this;
+};
+
+var _default = removeClass;
+exports.default = _default;
+},{"../utils":"utils.js"}],"JQuery/append.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = require("../utils");
+
+var append = function append() {
+  for (var _len = arguments.length, elements = new Array(_len), _key = 0; _key < _len; _key++) {
+    elements[_key] = arguments[_key];
+  }
+
+  if (elements.length > 1 && (0, _utils.isFunction)(elements[0])) {
+    return this;
+  }
+
+  var flattenedElements = elements.flat();
+  this.each(function (item, index) {
+    var newElements = (0, _utils.isFunction)(elements[0]) ? elements[0](index, item.innerHTML) : flattenedElements;
+    newElements.array.forEach(function (element) {
+      if ((0, _utils.isElement)(element)) {
+        item.appendChild(element);
+      } else if ((0, _utils.isJQuery)(element)) {
+        element.each(function (node) {
+          item.appendChild(node);
+        });
+      } else {
+        item.innerHTML += element;
+      }
+    });
+  });
+  return this;
+};
+
+var _default = append;
+exports.default = _default;
+},{"../utils":"utils.js"}],"JQuery/remove.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var remove = function remove() {
+  var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  selector = this.selector + selector;
+  var elements = document.querySelectorAll(selector);
+  elements.array.forEach(function (element) {
+    element.parentNode.removeChild(element);
+  });
+};
+
+var _default = remove;
+exports.default = _default;
+},{}],"JQuery/JQuery.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _each = _interopRequireDefault(require("./each"));
+
+var _addClass = _interopRequireDefault(require("./addClass"));
+
+var _removeClass = _interopRequireDefault(require("./removeClass"));
+
+var _append = _interopRequireDefault(require("./append"));
+
+var _remove = _interopRequireDefault(require("./remove"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-// import addClass from './JQuery/addClass';
-// import removeClass from './JQuery/removeClass';
-// import { isString, isFunction, uniq } from "../utils";
 var JQuery =
 /*#__PURE__*/
 function () {
@@ -148,10 +360,9 @@ function () {
     }
 
     if (typeof elements[Symbol.iterator] === 'function') {
-      for (var element in elements) {
-        if (elements.hasOwnProperty(element)) {
-          this[element] = elements[element];
-        }
+      for (var _i = 0, _Object$keys = Object.keys(elements); _i < _Object$keys.length; _i++) {
+        var elementKey = _Object$keys[_i];
+        this[elementKey] = elements[elementKey];
       }
     } else {
       this[0] = elements;
@@ -168,547 +379,39 @@ function () {
         next: function next() {
           return {
             value: _this[++index],
-            done: !_this.hasOwnProperty(index)
+            done: !_this[index]
           };
         }
       };
     }
-  }, {
-    key: "each",
-    value: function each(fn) {
-      for (var _i = 0, _Object$keys = Object.keys(this); _i < _Object$keys.length; _i++) {
-        var index = _Object$keys[_i];
-        fn(this[index], index);
-      }
-    }
-  }, {
-    key: "last",
-    value: function last() {
-      var elem_key = Math.max.apply(Math, _toConsumableArray(Object.keys(this).map(Number)));
-      return new JQuery(undefined, this[elem_key]);
-    }
-  }, {
-    key: "append",
-    value: function append() {
-      for (var _len = arguments.length, elements = new Array(_len), _key = 0; _key < _len; _key++) {
-        elements[_key] = arguments[_key];
-      }
-
-      if (elements.length === 1 && typeof elements[0] === 'function') {
-        for (var each in this) {
-          if (this.hasOwnProperty(each)) {
-            elements[0](each, this[each].innerHTML);
-          }
-        }
-      }
-
-      elements = elements.flat();
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _each = _step.value;
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = elements[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var each_elem = _step2.value;
-
-              if (typeof each_elem === 'Element') {
-                _each.appendChild(each_elem);
-              } else if (each_elem instanceof JQuery) {
-                var _iteratorNormalCompletion3 = true;
-                var _didIteratorError3 = false;
-                var _iteratorError3 = undefined;
-
-                try {
-                  for (var _iterator3 = each_elem[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var elem = _step3.value;
-
-                    _each.appendChild(elem);
-                  }
-                } catch (err) {
-                  _didIteratorError3 = true;
-                  _iteratorError3 = err;
-                } finally {
-                  try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                      _iterator3.return();
-                    }
-                  } finally {
-                    if (_didIteratorError3) {
-                      throw _iteratorError3;
-                    }
-                  }
-                }
-              } else {
-                _each.innerHTML += each_elem;
-              }
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return this;
-    }
-  }, {
-    key: "remove",
-    value: function remove() {
-      var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      selector = this.selector + selector;
-      var elements = document.querySelectorAll(selector);
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
-
-      try {
-        for (var _iterator4 = elements[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var element = _step4.value;
-          element.parentNode.removeChild(element);
-        }
-      } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-            _iterator4.return();
-          }
-        } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
-          }
-        }
-      }
-    }
-  }, {
-    key: "text",
-    value: function text(param) {
-      if (param) {
-        if (typeof param === 'function') {
-          for (var each in this) {
-            if (this.hasOwnProperty(each)) {
-              var new_text = param(each, each.innerHTML);
-
-              if (new_text) {
-                each.innerHTML = new_text;
-              }
-            }
-          }
-        } else {
-          this.innerHTML = param;
-        }
-      } else {
-        var res = '';
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
-
-        try {
-          for (var _iterator5 = this[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var _each2 = _step5.value;
-            res += _each2.innerHTML;
-          }
-        } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-              _iterator5.return();
-            }
-          } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
-            }
-          }
-        }
-
-        return res;
-      }
-
-      return this;
-    }
-  }, {
-    key: "attr",
-    value: function attr(attrName, value) {
-      if (_typeof(attrName) === 'object' && attrName.constructor === Object && attrName.toString() === '[object Object]') {
-        for (var _i2 = 0, _Object$keys2 = Object.keys(attrName); _i2 < _Object$keys2.length; _i2++) {
-          var each = _Object$keys2[_i2];
-          var _iteratorNormalCompletion6 = true;
-          var _didIteratorError6 = false;
-          var _iteratorError6 = undefined;
-
-          try {
-            for (var _iterator6 = this[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-              var each_elem = _step6.value;
-              each_elem.setAttribute(each, attrName[each]);
-            }
-          } catch (err) {
-            _didIteratorError6 = true;
-            _iteratorError6 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
-                _iterator6.return();
-              }
-            } finally {
-              if (_didIteratorError6) {
-                throw _iteratorError6;
-              }
-            }
-          }
-        }
-      } else if (typeof attrName === 'string') {
-        if (value) {
-          var new_attr_value = value;
-
-          if (typeof value === 'function') {
-            for (var _each_elem in this) {
-              if (this.hasOwnProperty(_each_elem)) {
-                new_attr_value = value(_each_elem, _each_elem.getAttribute(attrName));
-              }
-            }
-          }
-
-          if (['string', 'number', 'null'].indexOf(_typeof(new_attr_value)) !== -1) {
-            if (new_attr_value) {
-              var _iteratorNormalCompletion7 = true;
-              var _didIteratorError7 = false;
-              var _iteratorError7 = undefined;
-
-              try {
-                for (var _iterator7 = this[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-                  var _each_elem2 = _step7.value;
-                  console.log(_each_elem2);
-
-                  _each_elem2.setAttribute(attrName, new_attr_value);
-                }
-              } catch (err) {
-                _didIteratorError7 = true;
-                _iteratorError7 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
-                    _iterator7.return();
-                  }
-                } finally {
-                  if (_didIteratorError7) {
-                    throw _iteratorError7;
-                  }
-                }
-              }
-            } else {
-              var _iteratorNormalCompletion8 = true;
-              var _didIteratorError8 = false;
-              var _iteratorError8 = undefined;
-
-              try {
-                for (var _iterator8 = this[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-                  var _each_elem3 = _step8.value;
-
-                  _each_elem3.removeAttribute(attrName);
-                }
-              } catch (err) {
-                _didIteratorError8 = true;
-                _iteratorError8 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
-                    _iterator8.return();
-                  }
-                } finally {
-                  if (_didIteratorError8) {
-                    throw _iteratorError8;
-                  }
-                }
-              }
-            }
-          }
-        } else {
-          return this.last()[0].getAttribute(attrName);
-        }
-      }
-
-      return this;
-    }
-  }, {
-    key: "children",
-    value: function children(selector) {
-      var elements = [];
-      var elem;
-      var _iteratorNormalCompletion9 = true;
-      var _didIteratorError9 = false;
-      var _iteratorError9 = undefined;
-
-      try {
-        for (var _iterator9 = this[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-          var each = _step9.value;
-
-          if (selector) {
-            elem = each.querySelectorAll(selector);
-          } else {
-            elem = each.children;
-          }
-
-          if (elem.length !== 0) {
-            for (var each_elem in elem) {
-              if (elem.hasOwnProperty(each_elem)) elements.push(elem[each_elem]);
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError9 = true;
-        _iteratorError9 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
-            _iterator9.return();
-          }
-        } finally {
-          if (_didIteratorError9) {
-            throw _iteratorError9;
-          }
-        }
-      }
-
-      return new JQuery(undefined, elements);
-    }
-  }, {
-    key: "empty",
-    value: function empty() {
-      var _iteratorNormalCompletion10 = true;
-      var _didIteratorError10 = false;
-      var _iteratorError10 = undefined;
-
-      try {
-        for (var _iterator10 = this[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-          var each = _step10.value;
-          each.innerHTML = null;
-        }
-      } catch (err) {
-        _didIteratorError10 = true;
-        _iteratorError10 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion10 && _iterator10.return != null) {
-            _iterator10.return();
-          }
-        } finally {
-          if (_didIteratorError10) {
-            throw _iteratorError10;
-          }
-        }
-      }
-
-      return this;
-    }
-  }, {
-    key: "css",
-    value: function css(propertyName, value) {
-      if (_typeof(propertyName) === 'object' && propertyName.constructor === Object && propertyName.toString() === '[object Object]') {
-        for (var _i3 = 0, _Object$keys3 = Object.keys(propertyName); _i3 < _Object$keys3.length; _i3++) {
-          var each = _Object$keys3[_i3];
-          var _iteratorNormalCompletion11 = true;
-          var _didIteratorError11 = false;
-          var _iteratorError11 = undefined;
-
-          try {
-            for (var _iterator11 = this[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-              var each_elem = _step11.value;
-              each_elem.style.setProperty(each, propertyName[each]);
-            }
-          } catch (err) {
-            _didIteratorError11 = true;
-            _iteratorError11 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion11 && _iterator11.return != null) {
-                _iterator11.return();
-              }
-            } finally {
-              if (_didIteratorError11) {
-                throw _iteratorError11;
-              }
-            }
-          }
-        }
-      } else if (propertyName instanceof Array) {
-        var arr = [];
-        var _iteratorNormalCompletion12 = true;
-        var _didIteratorError12 = false;
-        var _iteratorError12 = undefined;
-
-        try {
-          for (var _iterator12 = propertyName[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-            var _each3 = _step12.value;
-            arr.push(this.last()[0].style.getPropertyValue(_each3));
-          }
-        } catch (err) {
-          _didIteratorError12 = true;
-          _iteratorError12 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
-              _iterator12.return();
-            }
-          } finally {
-            if (_didIteratorError12) {
-              throw _iteratorError12;
-            }
-          }
-        }
-
-        return arr;
-      } else if (typeof propertyName === 'string') {
-        if (value) {
-          var new_attr_value = value;
-
-          if (typeof value === 'function') {
-            for (var _each_elem4 in this) {
-              if (this.hasOwnProperty(_each_elem4)) {
-                new_attr_value = value(_each_elem4, _each_elem4.style.getProperty(propertyName));
-              }
-            }
-          }
-
-          if (['string', 'number'].indexOf(_typeof(new_attr_value)) !== -1) {
-            var _iteratorNormalCompletion13 = true;
-            var _didIteratorError13 = false;
-            var _iteratorError13 = undefined;
-
-            try {
-              for (var _iterator13 = this[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
-                var _each_elem5 = _step13.value;
-                console.log(_each_elem5);
-
-                _each_elem5.style.setProperty(propertyName, new_attr_value);
-              }
-            } catch (err) {
-              _didIteratorError13 = true;
-              _iteratorError13 = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
-                  _iterator13.return();
-                }
-              } finally {
-                if (_didIteratorError13) {
-                  throw _iteratorError13;
-                }
-              }
-            }
-          }
-        } else {
-          return this.last()[0].style.getPropertyValue(propertyName);
-        }
-      }
-
-      return this;
-    }
-  }, {
-    key: "click",
-    value: function click(handlerData, handler) {
-      if (handlerData) {
-        if (!handler) {
-          handler = handlerData;
-        }
-
-        var _iteratorNormalCompletion14 = true;
-        var _didIteratorError14 = false;
-        var _iteratorError14 = undefined;
-
-        try {
-          for (var _iterator14 = this[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
-            var each = _step14.value;
-            each.addEventListener("click", handler);
-          }
-        } catch (err) {
-          _didIteratorError14 = true;
-          _iteratorError14 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion14 && _iterator14.return != null) {
-              _iterator14.return();
-            }
-          } finally {
-            if (_didIteratorError14) {
-              throw _iteratorError14;
-            }
-          }
-        }
-      } else {
-        var _iteratorNormalCompletion15 = true;
-        var _didIteratorError15 = false;
-        var _iteratorError15 = undefined;
-
-        try {
-          for (var _iterator15 = this[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
-            var _each4 = _step15.value;
-
-            _each4.trigger("click");
-          }
-        } catch (err) {
-          _didIteratorError15 = true;
-          _iteratorError15 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion15 && _iterator15.return != null) {
-              _iterator15.return();
-            }
-          } finally {
-            if (_didIteratorError15) {
-              throw _iteratorError15;
-            }
-          }
-        }
-      }
-    }
   }]);
 
   return JQuery;
-}(); // JQuery.prototype.addClass = addClass;
-// JQuery.prototype.removeClass = removeClass;
+}();
 
+JQuery.prototype.each = _each.default;
+JQuery.prototype.addClass = _addClass.default;
+JQuery.prototype.removeClass = _removeClass.default;
+JQuery.prototype.append = _append.default;
+JQuery.prototype.remove = _remove.default;
+var _default = JQuery;
+exports.default = _default;
+},{"./each":"JQuery/each.js","./addClass":"JQuery/addClass.js","./removeClass":"JQuery/removeClass.js","./append":"JQuery/append.js","./remove":"JQuery/remove.js"}],"index.js":[function(require,module,exports) {
+"use strict";
+
+var _JQuery = _interopRequireDefault(require("./JQuery/JQuery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function $(selector) {
   if (typeof selector === 'string') {
-    return new JQuery(selector);
+    var res = new _JQuery.default(selector);
+    return res;
   }
 
   return null;
 }
-},{}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./JQuery/JQuery":"JQuery/JQuery.js"}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -736,7 +439,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41397" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37409" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
