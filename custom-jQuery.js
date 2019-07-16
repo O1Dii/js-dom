@@ -25,12 +25,18 @@ class JQuery {
         }
     }
 
-    last() {
-        const elem_key = Math.max(...Object.keys(this).map(Number));
-        return new JQuery(undefined, this[elem_key])
+    each(fn) {
+        for (const index of Object.keys(this)) {
+            fn(this[index], index);
+        }
     }
 
-    addClass(classes, hi) {
+    last() {
+        const elem_key = Math.max(...Object.keys(this).map(Number));
+        return new JQuery(undefined, this[elem_key]);
+    }
+
+    addClass(classes) {
         if (typeof classes === 'string' || typeof classes === 'function') {
             for (const each in this) {
                 if (this.hasOwnProperty(each)) {
@@ -97,7 +103,6 @@ class JQuery {
         }
         elements = elements.flat();
         for (const each of this) {
-            console.log(each);
             for (const each_elem of elements) {
                 if (typeof each_elem === 'Element') {
                     each.appendChild(each_elem);
@@ -126,7 +131,7 @@ class JQuery {
     text(param) {
         if (param) {
             if (typeof param === 'function') {
-                for (each in this) {
+                for (const each in this) {
                     if (this.hasOwnProperty(each)) {
                         const new_text = param(each, each.innerHTML);
                         if (new_text) {
@@ -152,7 +157,7 @@ class JQuery {
     attr(attrName, value) {
         if (typeof attrName === 'object' && attrName.constructor === Object && attrName.toString() === '[object Object]') {
             for (let each of Object.keys(attrName)) {
-                for (each_elem of this) {
+                for (const each_elem of this) {
                     each_elem.setAttribute(each, attrName[each]);
                 }
             }
@@ -161,7 +166,7 @@ class JQuery {
             if (value) {
                 let new_attr_value = value;
                 if (typeof value === 'function') {
-                    for (each_elem in this) {
+                    for (const each_elem in this) {
                         if (this.hasOwnProperty(each_elem)) {
                             new_attr_value = value(each_elem, each_elem.getAttribute(attrName));
                         }
@@ -223,11 +228,18 @@ class JQuery {
                 }
             }
         }
+        else if (propertyName instanceof Array) {
+            let arr = [];
+            for (const each of propertyName) {
+                arr.push(this.last()[0].style.getPropertyValue(each));
+            }
+            return arr;
+        }
         else if (typeof propertyName === 'string') {
             if (value) {
                 let new_attr_value = value;
                 if (typeof value === 'function') {
-                    for (each_elem in this) {
+                    for (const each_elem in this) {
                         if (this.hasOwnProperty(each_elem)) {
                             new_attr_value = value(each_elem, each_elem.style.getProperty(propertyName));
                         }
@@ -246,7 +258,26 @@ class JQuery {
         }
         return this;
     }
+
+    click(handlerData, handler) {
+        if (handlerData) {
+            if (!handler) {
+                handler = handlerData;
+            }
+            for (const each of this) {
+                each.addEventListener("click", handler);
+            }
+        }
+        else {
+            for (const each of this) {
+                each.trigger("click");
+            }
+        }
+    }
 }
+
+// JQuery.prototype.addClass = addClass;
+// JQuery.prototype.removeClass = removeClass;
 
 function $(selector) {
     if (typeof selector === 'string') {
