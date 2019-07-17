@@ -16,8 +16,16 @@ export const isJQuery = (obj) => {
     return obj instanceof JQuery;
 }
 
+export const isNodeList = (obj) => {
+    return obj instanceof NodeList;
+}
+
 export const isArray = (obj) => {
     return obj instanceof Array;
+}
+
+export const isHTMLString = (str) => {
+    return Boolean(str.search(/.*<.+>.*<\/.+>.*/) + 1);
 }
 
 export const noNaNMax = (arr) => {
