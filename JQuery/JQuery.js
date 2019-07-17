@@ -8,6 +8,7 @@ import attr from './attr';
 import children from './children';
 import empty from './empty';
 import css from './css';
+import click from './click';
 
 
 class JQuery {
@@ -46,5 +47,6 @@ JQuery.prototype.attr = attr;
 JQuery.prototype.children = children;
 JQuery.prototype.empty = empty;
 JQuery.prototype.css = css;
+JQuery.prototype.click = click;
 
 export default JQuery;

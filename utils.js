@@ -20,6 +20,20 @@ export const isArray = (obj) => {
     return obj instanceof Array;
 }
 
+export const noNaNMax = (arr) => {
+    if (!isArray(arr)) {
+        return null;
+    }
+
+    let max = -Infinity;
+    arr.array.forEach(element => {
+        if (parseInt(element) > max) {
+            max = element;
+        }
+    });
+    return max;
+}
+
 export const isPlainObject = (obj) => {
     return typeof obj === 'object' && obj.constructor === Object && obj.toString() === '[object Object]';
 }
