@@ -2,3 +2,4 @@
 .cache
 .eslintrc.json
 node_modules
+dist

@@ -16,14 +16,12 @@ const attr = function (attrName, value) {
         if (value) {
             this.each((item, index) => {
                 const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
-                if (['string', 'number', 'null'].includes(typeof new_attr_value)) {
-                    this.each((item) => {
-                        if (newAttrValue !== null) {
-                            item.setAttribute(attrName, newAttrValue);
-                        } else {
-                            item.removeAttribute(attrName);
-                        }
-                    });
+                if (['string', 'number', 'null'].includes(typeof newAttrValue)) {
+                    if (newAttrValue !== null) {
+                        item.setAttribute(attrName, newAttrValue);
+                    } else {
+                        item.removeAttribute(attrName);
+                    }
                 }
             });
         }
@@ -31,6 +29,7 @@ const attr = function (attrName, value) {
             return this.last()[0].getAttribute(attrName);
         }
     }
+
     return this;
 }
 

@@ -4,6 +4,8 @@ const remove = function (selector = '') {
     elements.array.forEach(element => {
         element.parentNode.removeChild(element);
     });
+
+    return this;
 }
 
 export default remove;

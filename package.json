@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/O1Dii/js-dom#readme",
   "devDependencies": {
-    "eslint": "^6.0.1"
+    "eslint": "^6.0.1",
+    "parcel": "^1.12.3"
   }
 }

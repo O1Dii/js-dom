@@ -24,6 +24,7 @@ const css = function (propertyName, value) {
             return this.last()[0].style.getPropertyValue(propertyName);
         }
     }
+
     return this;
 }
 

@@ -3,13 +3,13 @@ import { isFunction } from '../utils';
 const textAndHTML = function (param, html = true) {
     if (param) {
         this.each((item) => {
-            const new_text = isFunction(param) ? param(item, item.innerHTML) : param;
-            if (new_text) {
+            const newText = isFunction(param) ? param(item, item.innerHTML) : param;
+            if (newText) {
                 if (html) {
-                    item.innerHTML = new_text;
+                    item.innerHTML = newText;
                 }
                 else {
-                    item.innerText = new_text;
+                    item.innerText = newText;
                 }
             }
         });
@@ -29,6 +29,7 @@ const textAndHTML = function (param, html = true) {
         }
         return res;
     }
+
     return this;
 }
 

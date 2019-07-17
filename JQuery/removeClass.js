@@ -8,7 +8,7 @@ const removeClass = function (classes) {
     this.each((item, index) => {
         const toRemoveClasses = isFunction(classes) ? classes(index, item.className) : classes;
         if (!isString(toRemoveClasses)) {
-            return;
+            return this;
         }
         if (item.className) {
             const existClasses = item.className.split(' ').filter(className => className);

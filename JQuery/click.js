@@ -13,6 +13,8 @@ const click = function (handlerData, handler) {
             item.trigger("click");
         });
     }
+
+    return this;
 }
 
 

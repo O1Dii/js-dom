@@ -2,6 +2,7 @@ import JQuery from './JQuery';
 
 const children = function (selector) {
     let allElements = [];
+
     this.each((item) => {
         const currentElements = selector ? item.querySelectorAll(selector) : item.children;
         if (currentElements.length !== 0) {
@@ -10,6 +11,7 @@ const children = function (selector) {
             });
         }
     });
+
     return new JQuery(undefined, allElements);
 }
 

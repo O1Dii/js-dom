@@ -8,7 +8,7 @@ const addClass = function (classes) {
     this.each((item, index) => {
         const newClasses = isFunction(classes) ? classes(index, item.className) : classes;
         if (!isString(newClasses)) {
-            return;
+            return this;
         }
 
         if (item.className) {

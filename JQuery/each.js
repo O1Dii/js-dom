@@ -1,7 +1,9 @@
 const each = function (fn) {
-    for (const index of Object.keys(this)) {
-        fn(this[index], index);
-    }
+    Object.entries(this).array.forEach(element => {
+        fn(element[1], element[0]);
+    });
+
+    return this;
 }
 
 export default each;
