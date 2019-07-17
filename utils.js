@@ -16,6 +16,10 @@ export const isJQuery = (obj) => {
     return obj instanceof JQuery;
 }
 
+export const isArray = (obj) => {
+    return obj instanceof Array;
+}
+
 export const isPlainObject = (obj) => {
     return typeof obj === 'object' && obj.constructor === Object && obj.toString() === '[object Object]';
 }

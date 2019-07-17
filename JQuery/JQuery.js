@@ -5,6 +5,9 @@ import append from './append';
 import remove from './remove';
 import text from './text';
 import attr from './attr';
+import children from './children';
+import empty from './empty';
+import css from './css';
 
 
 class JQuery {
@@ -40,5 +43,8 @@ JQuery.prototype.append = append;
 JQuery.prototype.remove = remove;
 JQuery.prototype.text = text;
 JQuery.prototype.attr = attr;
+JQuery.prototype.children = children;
+JQuery.prototype.empty = empty;
+JQuery.prototype.css = css;
 
 export default JQuery;

@@ -14,8 +14,8 @@ const attr = function (attrName, value) {
     }
     else {
         if (value) {
-            this.each((item) => {
-                const newAttrValue = isFunction(value) ? value(item, item.getAttribute(attrName)) : value;
+            this.each((item, index) => {
+                const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
                 if (['string', 'number', 'null'].includes(typeof new_attr_value)) {
                     this.each((item) => {
                         if (newAttrValue !== null) {
