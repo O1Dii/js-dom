@@ -4,16 +4,10 @@ const children = function (selector) {
     let allElements = [];
 
     this.each((item) => {
-        const currentElements = selector ? item.querySelectorAll(selector) : item.children;
-        if (currentElements.length !== 0) {
-            currentElements.array.forEach(element => {
-                allElements.push(element);
-            });
-        }
+        allElements.push(selector ? item.querySelectorAll(selector) : item.children);
     });
 
     return new JQuery(undefined, allElements);
 }
-
 
 export default children;

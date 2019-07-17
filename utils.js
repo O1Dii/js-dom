@@ -4,6 +4,18 @@ export const isString = (obj) => {
     return typeof obj === 'string';
 }
 
+export const isNumber = (obj) => {
+    return typeof obj === 'number';
+}
+
+export const isNull = (obj) => {
+    return obj === null;
+}
+
+export const isBoolean = (obj) => {
+    return typeof obj === 'boolean';
+}
+
 export const isFunction = (obj) => {
     return typeof obj === 'function';
 }
@@ -28,18 +40,17 @@ export const isHTMLString = (str) => {
     return Boolean(str.search(/.*<.+>.*<\/.+>.*/) + 1);
 }
 
-export const noNaNMax = (arr) => {
+export const max = (arr) => {
     if (!isArray(arr)) {
         return null;
     }
 
-    let max = -Infinity;
-    arr.array.forEach(element => {
-        if (parseInt(element) > max) {
-            max = element;
+    arr.reduce((prev, cur) => {
+        if (parseInt(prev) > cur) {
+            cur = prev;
         }
     });
-    return max;
+    return arr.pop();
 }
 
 export const isPlainObject = (obj) => {
@@ -48,8 +59,8 @@ export const isPlainObject = (obj) => {
 
 export const uniq = (arr1, arr2) => [...new Set([...arr1, ...arr2])];
 
-export const diff = (arr1, arr2) => {
-    arr1.array.filter(element => {
-        return !arr2.includes(element);
+export const difference = (arr1, arr2) => {
+    return arr1.array.filter(element => {
+        !arr2.includes(element);
     })
 }

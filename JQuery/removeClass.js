@@ -6,14 +6,15 @@ const removeClass = function (classes) {
     }
 
     this.each((item, index) => {
-        const toRemoveClasses = isFunction(classes) ? classes(index, item.className) : classes;
-        if (!isString(toRemoveClasses)) {
-            return this;
+        const passedClasses = isFunction(classes) ? classes(index, item.className) : classes;
+        if (!isString(passedClasses)) {
+            return;
         }
         if (item.className) {
             const existClasses = item.className.split(' ').filter(className => className);
+            const toRemoveClasses = passedClasses.split(' ').filter(className => className);
 
-            item.className = diff(existClasses, toRemoveClasses.split(' ')).join(' ');
+            item.className = diff(existClasses, toRemoveClasses).join(' ');
         }
         item.className = item.className.trim();
     });

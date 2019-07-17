@@ -1,4 +1,4 @@
-import { isPlainObject, isString, isFunction } from "../utils";
+import { isPlainObject, isString, isFunction, isNumber, isNull } from "../utils";
 
 const attr = function (attrName, value) {
     if (!isPlainObject(attrName) && !isString(attrName)) {
@@ -6,32 +6,46 @@ const attr = function (attrName, value) {
     }
 
     if (isPlainObject(attrName)) {
-        Object.entries(attrName).array.forEach(element => {
-            this.each((item) => {
-                item.setAttribute(element[0], element[1]);
-            });
-        });
+        const bindedObjectAttr = objectAttr.bind(this);
+        return bindedObjectAttr(attrName);
     }
-    else {
-        if (value) {
-            this.each((item, index) => {
-                const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
-                if (['string', 'number', 'null'].includes(typeof newAttrValue)) {
-                    if (newAttrValue !== null) {
-                        item.setAttribute(attrName, newAttrValue);
-                    } else {
-                        item.removeAttribute(attrName);
-                    }
-                }
-            });
-        }
-        else {
-            return this.last()[0].getAttribute(attrName);
-        }
+
+    if (isString(attrName)) {
+        const bindedStringAttr = stringAttr.bind(this);
+        return bindedStringAttr(attrName, value);
     }
 
     return this;
 }
 
+function objectAttr(attrName) {
+    Object.entries(attrName).forEach(([key, value]) => {
+        this.each(item => item.setAttribute(key, value))
+    });
+
+    return this;
+}
+
+function stringAttr(attrName, value) {
+    if (value) {
+        const setNewAttribute = setAttribute.bind(null, attrName, value);
+        this.each(setNewAttribute);
+    }
+    else {
+        return this.last()[0].getAttribute(attrName);
+    }
+
+    return this;
+}
+
+function setAttribute(attrName, value, item, index) {
+    const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
+    if (isString(newAttrValue) || isNumber(newAttrValue)) {
+        item.setAttribute(attrName, newAttrValue);
+    }
+    if (isNull(newAttrValue)) {
+        item.removeAttribute(attrName);
+    }
+}
 
 export default attr;

@@ -6,17 +6,18 @@ const addClass = function (classes) {
     }
 
     this.each((item, index) => {
-        const newClasses = isFunction(classes) ? classes(index, item.className) : classes;
-        if (!isString(newClasses)) {
-            return this;
+        const passedClasses = isFunction(classes) ? classes(index, item.className) : classes;
+        if (!isString(passedClasses)) {
+            return;
         }
 
         if (item.className) {
             const existClasses = item.className.split(' ').filter(className => className);
+            const newClasses = passedClasses.split(' ').filter(className => className);
 
-            item.className = uniq(existClasses, newClasses.split(' ')).join(' ');
+            item.className = uniq(existClasses, newClasses).join(' ');
         } else {
-            item.className = newClasses;
+            item.className = passedClasses;
         }
     });
 
