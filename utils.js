@@ -16,6 +16,10 @@ export const isJQuery = (obj) => {
     return obj instanceof JQuery;
 }
 
+export const isPlainObject = (obj) => {
+    return typeof obj === 'object' && obj.constructor === Object && obj.toString() === '[object Object]';
+}
+
 export const uniq = (arr1, arr2) => [...new Set([...arr1, ...arr2])];
 
 export const diff = (arr1, arr2) => {

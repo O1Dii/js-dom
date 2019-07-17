@@ -3,6 +3,8 @@ import addClass from './addClass';
 import removeClass from './removeClass';
 import append from './append';
 import remove from './remove';
+import text from './text';
+import attr from './attr';
 
 
 class JQuery {
@@ -36,5 +38,7 @@ JQuery.prototype.addClass = addClass;
 JQuery.prototype.removeClass = removeClass;
 JQuery.prototype.append = append;
 JQuery.prototype.remove = remove;
+JQuery.prototype.text = text;
+JQuery.prototype.attr = attr;
 
 export default JQuery;
