@@ -1,7 +1,7 @@
-import textAndHTML from './textAndHTML';
+import textHTML from './textHTML';
 
 const html = function (param) {
-    return textAndHTML(param, true);
-}
+  return textHTML(param, true);
+};
 
 export default html;

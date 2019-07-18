@@ -1,8 +1,7 @@
-import textAndHTML from './textAndHTML';
+import textHTML from './textHTML';
 
 const text = function (param) {
-    return textAndHTML(param, false);
-}
-
+  return textHTML(param, false);
+};
 
 export default text;

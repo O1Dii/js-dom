@@ -1,10 +1,10 @@
 const remove = function (selector = '') {
-    const newSelector = this.selector + selector,
-          elements = document.querySelectorAll(newSelector);
+  const newSelector = this.selector + selector;
+  const elements = document.querySelectorAll(newSelector);
 
-    elements.forEach(element => element.parentNode.removeChild(element));
+  elements.forEach(element => element.parentNode.removeChild(element));
 
-    return this;
-}
+  return this;
+};
 
 export default remove;

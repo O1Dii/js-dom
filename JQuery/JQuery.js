@@ -13,32 +13,27 @@ import css from './css';
 import click from './click';
 import wrap from './wrap';
 import toggle from './toggle';
-
+import { isFunction } from '../utils';
 
 class JQuery {
-    constructor(selector, elements) {
-        if (!elements) {
-            elements = document.querySelectorAll(selector);
-        }
-
-        if (typeof elements[Symbol.iterator] === 'function') {
-            for (const elementKey of Object.keys(elements)) {
-                this[elementKey] = elements[elementKey];
-            }
-        }
-        else {
-            this[0] = elements;
-        }
+  constructor(selector, elements) {
+    if (!elements) {
+      elements = document.querySelectorAll(selector);
     }
 
-    [Symbol.iterator]() {
-        let index = -1;
-        return {
-            next: () => {
-                return { value: this[++index], done: !this[index] };
-            }
-        }
+    if (isFunction(elements[Symbol.iterator])) {
+      Object.keys(elements).forEach((elementKey) => {
+        this[elementKey] = elements[elementKey];
+      });
+    } else {
+      this[0] = elements;
     }
+  }
+
+  [Symbol.iterator]() {
+    let index = -1;
+    return { next: () => ({ value: this[++index], done: !this[index] }) };
+  }
 }
 
 JQuery.prototype.each = each;
@@ -56,6 +51,5 @@ JQuery.prototype.css = css;
 JQuery.prototype.click = click;
 JQuery.prototype.wrap = wrap;
 JQuery.prototype.toggle = toggle;
-
 
 export default JQuery;
