@@ -1,9 +1,9 @@
-import { isFunction, isString, isHTMLString, isJQuery, isElement, isNodeList } from '../utils';
+import { isFunction, isString, isHTMLString, isJQuery, isElement, isNodeList, createElementFromHTML } from '../utils';
 
 function stringWrap(item, wrapper) {
   if (isHTMLString(wrapper)) {
-    const index = wrapper.lastIndexOf('</');
-    return wrapper.substring(0, index) + item + wrapper.substring(index);
+    const wrappingElement = createElementFromHTML(wrapper);
+    return wrappingElement;
   }
 
   return item.querySelectorAll(wrapper);
@@ -14,19 +14,17 @@ function listsWrap(wrapper) {
 }
 
 function elementWrap(item, wrapper) {
-  return wrapper.appendChild(item);
+  const newNode = item.cloneNode();
+  newNode.innerHTML = item.innerHTML;
+  wrapper.appendChild(newNode);
+  return wrapper;
 }
 
 function makeWrap(wrappingElement, item, index) {
   let wrapper = isFunction(wrappingElement) ? wrappingElement(index) : wrappingElement;
 
   if (isString(wrapper)) {
-    const res = stringWrap(item, wrapper);
-    if (isString(res)) {
-      item = res;
-    } else {
-      wrapper = stringWrap;
-    }
+    wrapper = stringWrap(item, wrapper);
   }
 
   if (isJQuery(wrapper) || isNodeList(wrapper)) {
@@ -34,12 +32,17 @@ function makeWrap(wrappingElement, item, index) {
   }
 
   if (isElement(wrapper)) {
-    item = elementWrap(item, wrapper);
+    wrapper = elementWrap(item, wrapper);
   }
+
+  return wrapper;
 }
 
 const wrap = function (wrappingElement) {
-  this.each((item, index) => makeWrap(wrappingElement, item, index));
+  this.each((item, index) => {
+    const element = makeWrap(wrappingElement, item, index);
+    item.replaceWith(element);
+  });
 
   return this;
 };

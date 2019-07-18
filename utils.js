@@ -18,7 +18,14 @@ export const isNodeList = obj => obj instanceof NodeList;
 
 export const isArray = obj => obj instanceof Array;
 
-export const isHTMLString = str => str.test(/.*<.+>.*<\/.+>.*/);
+export const isHTMLString = str => /.*<.+>.*<\/.+>.*/.test(str);
+
+export const createElementFromHTML = (str) => {
+  const div = document.createElement('div');
+  div.innerHTML = str.trim();
+
+  return div.firstChild;
+}
 
 export const max = (arr) => {
   if (!isArray(arr)) {
@@ -35,4 +42,4 @@ export const isPlainObject = obj => typeof obj === 'object' && obj.constructor =
 
 export const uniq = (arr1, arr2) => [...new Set([...arr1, ...arr2])];
 
-export const difference = (arr1, arr2) => arr1.array.filter(element => !arr2.includes(element));
+export const difference = (arr1, arr2) => arr1.filter(element => !arr2.includes(element));

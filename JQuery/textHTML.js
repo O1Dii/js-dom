@@ -36,7 +36,7 @@ const textHTML = function (param, html = true) {
   if (param) {
     this.each(item => textReplace(param, html, item));
   } else {
-    return textReturn(html);
+    return textReturn.bind(this)(html);
   }
 
   return this;
