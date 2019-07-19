@@ -15,6 +15,7 @@ function arrayCss(property) {
 function setProperty(propertyName, value, item, index) {
   const newAttrValue = isFunction(value)
     ? value(index, item.style.getProperty(propertyName)) : value;
+
   if (isString(newAttrValue) || isNumber(newAttrValue)) {
     item.style.setProperty(propertyName, newAttrValue);
   }
@@ -23,6 +24,7 @@ function setProperty(propertyName, value, item, index) {
 function stringCss(propertyName, value) {
   if (value) {
     const setNewProperty = setProperty.bind(null, propertyName, value);
+
     this.each(setNewProperty);
   } else {
     return this.last()[0].style.getPropertyValue(propertyName);
@@ -33,18 +35,15 @@ function stringCss(propertyName, value) {
 
 const css = function (propertyName, value) {
   if (isPlainObject(propertyName)) {
-    const bindedObjectCss = objectCss.bind(this);
-    return bindedObjectCss(propertyName);
+    return objectCss.call(this, propertyName);
   }
 
   if (isArray(propertyName)) {
-    const bindedArrayCss = arrayCss.bind(this);
-    return bindedArrayCss(propertyName);
+    return arrayCss.call(this, propertyName);
   }
 
   if (isString(propertyName)) {
-    const bindedStringCss = stringCss.bind(this);
-    return bindedStringCss(propertyName, value);
+    return stringCss.call(this, propertyName, value);
   }
 
   return this;

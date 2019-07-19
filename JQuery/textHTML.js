@@ -1,6 +1,6 @@
 import { isFunction } from '../utils';
 
-function textReplace(param, html, item) {
+function setText(param, html, item) {
   const newText = isFunction(param) ? param(item, item.innerHTML) : param;
 
   if (!newText) {
@@ -14,7 +14,7 @@ function textReplace(param, html, item) {
   }
 }
 
-function textReturn(html) {
+function getText(html) {
   let res = '';
 
   if (html) {
@@ -34,9 +34,9 @@ function textReturn(html) {
 
 const textHTML = function (param, html = true) {
   if (param) {
-    this.each(item => textReplace(param, html, item));
+    this.each(item => setText(param, html, item));
   } else {
-    return textReturn.bind(this)(html);
+    return getText.call(this, html);
   }
 
   return this;

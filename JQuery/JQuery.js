@@ -12,7 +12,6 @@ import empty from './empty';
 import css from './css';
 import click from './click';
 import wrap from './wrap';
-import toggle from './toggle';
 import { isFunction } from '../utils';
 
 class JQuery {
@@ -50,6 +49,5 @@ JQuery.prototype.empty = empty;
 JQuery.prototype.css = css;
 JQuery.prototype.click = click;
 JQuery.prototype.wrap = wrap;
-JQuery.prototype.toggle = toggle;
 
 export default JQuery;

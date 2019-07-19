@@ -7,6 +7,7 @@ const addClass = function (classes) {
 
   this.each((item, index) => {
     const passedClasses = isFunction(classes) ? classes(index, item.className) : classes;
+
     if (!isString(passedClasses)) {
       return;
     }

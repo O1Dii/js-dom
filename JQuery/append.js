@@ -1,11 +1,6 @@
 import { isFunction, isElement, isJQuery } from '../utils';
 
 function appendEach(item, element) {
-  if (!isElement(element) && !isJQuery(element)) {
-    item.innerHTML += element;
-    return;
-  }
-
   if (isElement(element)) {
     item.appendChild(element);
     return;
@@ -13,14 +8,19 @@ function appendEach(item, element) {
 
   if (isJQuery(element)) {
     element.each(item.appendChild);
+    return;
   }
+
+  item.innerHTML += element;
 }
 
 const append = function (...elements) {
   const flattenedElements = elements.flat();
+
   this.each((item, index) => {
     const newElements = isFunction(elements[0])
       ? elements[0](index, item.innerHTML) : flattenedElements;
+
     newElements.forEach(element => appendEach(item, element));
   });
 

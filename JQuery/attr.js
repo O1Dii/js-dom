@@ -1,26 +1,28 @@
 import { isPlainObject, isString, isFunction, isNumber, isNull } from '../utils';
 
-function objectAttr(attrName) {
-  Object.entries(attrName).forEach(([key, value]) => {
-    this.each(item => item.setAttribute(key, value));
-  });
-
-  return this;
-}
-
-function setAttribute(attrName, value, item, index) {
+function setAttr(attrName, value, item, index) {
   const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
+
   if (isString(newAttrValue) || isNumber(newAttrValue)) {
     item.setAttribute(attrName, newAttrValue);
   }
+
   if (isNull(newAttrValue)) {
     item.removeAttribute(attrName);
   }
 }
 
-function stringAttr(attrName, value) {
+function setAttrFromObj(attrName) {
+  Object.entries(attrName).forEach(([name, value]) => {
+    this.each((item, index) => setAttr(name, value, item, index));
+  });
+
+  return this;
+}
+
+function setAttrFromString(attrName, value) {
   if (value) {
-    this.each((item, index) => setAttribute(attrName, value, item, index));
+    this.each((item, index) => setAttr(attrName, value, item, index));
   } else {
     return this.last()[0].getAttribute(attrName);
   }
@@ -34,13 +36,11 @@ const attr = function (attrName, value) {
   }
 
   if (isPlainObject(attrName)) {
-    const bindedObjectAttr = objectAttr.bind(this);
-    return bindedObjectAttr(attrName);
+    return setAttrFromObj.call(this, attrName);
   }
 
   if (isString(attrName)) {
-    const bindedStringAttr = stringAttr.bind(this);
-    return bindedStringAttr(attrName, value);
+    return setAttrFromString.call(this, attrName, value);
   }
 
   return this;
