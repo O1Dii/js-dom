@@ -1,10 +1,9 @@
-import JQuery from './JQuery';
 import { max } from '../utils';
 
-const last = function () {
+function last() {
   const elemKey = max(Object.keys(this));
 
-  return new JQuery(undefined, this[elemKey]);
-};
+  return new this(undefined, this[elemKey]);
+}
 
 export default last;

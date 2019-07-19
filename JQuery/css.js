@@ -1,4 +1,6 @@
-import { isPlainObject, isArray, isString, isFunction, isNumber } from '../utils';
+import {
+  isPlainObject, isArray, isString, isFunction, isNumber,
+} from '../utils';
 
 function objectCss(propertyName) {
   Object.entries(propertyName).forEach(([key, value]) => {
@@ -33,7 +35,7 @@ function stringCss(propertyName, value) {
   return this;
 }
 
-const css = function (propertyName, value) {
+function css(propertyName, value) {
   if (isPlainObject(propertyName)) {
     return objectCss.call(this, propertyName);
   }
@@ -47,6 +49,6 @@ const css = function (propertyName, value) {
   }
 
   return this;
-};
+}
 
 export default css;

@@ -1,4 +1,6 @@
-import { isFunction, isString, isHTMLString, isJQuery, isElement, isNodeList, createElementFromHTML, maxDepth } from '../utils';
+import {
+  isFunction, isString, isHTMLString, isElement, isNodeList, createElementFromHTML,
+} from '../utils';
 
 function getWrapFromString(item, wrapper) {
   if (isHTMLString(wrapper)) {
@@ -11,9 +13,7 @@ function getWrapFromString(item, wrapper) {
 }
 
 function getWrapFromIterable(wrapper) {
-  const depth = maxDepth(wrapper[0]);
-
-  return wrapper[0].cloneNode(depth);
+  return wrapper[0].cloneNode(true);
 }
 
 function getWrapFromElement(item, wrapper) {
@@ -31,7 +31,7 @@ function makeWrap(wrappingElement, item, index) {
     wrapper = getWrapFromString(item, wrapper);
   }
 
-  if (isJQuery(wrapper) || isNodeList(wrapper)) {
+  if (wrapper instanceof this || isNodeList(wrapper)) {
     wrapper = getWrapFromIterable(wrapper);
   }
 
@@ -42,7 +42,7 @@ function makeWrap(wrappingElement, item, index) {
   return wrapper;
 }
 
-const wrap = function (wrappingElement) {
+function wrap(wrappingElement) {
   this.each((item, index) => {
     const element = makeWrap(wrappingElement, item, index);
 
@@ -50,6 +50,6 @@ const wrap = function (wrappingElement) {
   });
 
   return this;
-};
+}
 
 export default wrap;

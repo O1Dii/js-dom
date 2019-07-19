@@ -1,4 +1,6 @@
-import { isPlainObject, isString, isFunction, isNumber, isNull } from '../utils';
+import {
+  isPlainObject, isString, isFunction, isNumber, isNull,
+} from '../utils';
 
 function setAttr(attrName, value, item, index) {
   const newAttrValue = isFunction(value) ? value(index, item.getAttribute(attrName)) : value;
@@ -30,11 +32,7 @@ function setAttrFromString(attrName, value) {
   return this;
 }
 
-const attr = function (attrName, value) {
-  if (!isPlainObject(attrName) && !isString(attrName)) {
-    return this;
-  }
-
+function attr(attrName, value) {
   if (isPlainObject(attrName)) {
     return setAttrFromObj.call(this, attrName);
   }
@@ -44,6 +42,6 @@ const attr = function (attrName, value) {
   }
 
   return this;
-};
+}
 
 export default attr;

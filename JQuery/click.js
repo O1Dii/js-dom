@@ -1,4 +1,4 @@
-const click = function (handlerData, handler) {
+function click(handlerData, handler) {
   if (handlerData) {
     const bindedHandler = handler ? handler.bind(null, handlerData) : handlerData;
 
@@ -8,6 +8,6 @@ const click = function (handlerData, handler) {
   }
 
   return this;
-};
+}
 
 export default click;

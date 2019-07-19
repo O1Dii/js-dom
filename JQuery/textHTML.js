@@ -32,7 +32,7 @@ function getText(html) {
   return res;
 }
 
-const textHTML = function (param, html = true) {
+function textHTML(param, html = true) {
   if (param) {
     this.each(item => setText(param, html, item));
   } else {
@@ -40,6 +40,6 @@ const textHTML = function (param, html = true) {
   }
 
   return this;
-};
+}
 
 export default textHTML;

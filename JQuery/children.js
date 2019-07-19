@@ -1,14 +1,13 @@
-import JQuery from './JQuery';
-
-const children = function (selector) {
+function children(selector) {
   const allElements = [];
 
   this.each((item) => {
     const childElements = selector ? item.querySelectorAll(selector) : item.children;
+
     allElements.push(childElements);
   });
 
-  return new JQuery(undefined, allElements);
-};
+  return new this(undefined, allElements);
+}
 
 export default children;

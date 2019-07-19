@@ -1,6 +1,6 @@
 import { isString, isFunction, difference } from '../utils';
 
-const removeClass = function (classes) {
+function removeClass(classes) {
   if (!isString(classes) && !isFunction(classes)) {
     return this;
   }
@@ -23,6 +23,6 @@ const removeClass = function (classes) {
   });
 
   return this;
-};
+}
 
 export default removeClass;

@@ -1,6 +1,6 @@
 import { isString, isFunction, uniq } from '../utils';
 
-const addClass = function (classes) {
+function addClass(classes) {
   if (!isString(classes) && !isFunction(classes)) {
     return this;
   }
@@ -23,6 +23,6 @@ const addClass = function (classes) {
   });
 
   return this;
-};
+}
 
 export default addClass;
