@@ -1,3 +1,5 @@
+import JQuery from './JQuery/JQuery';
+
 export const isString = obj => typeof obj === 'string';
 
 export const isNumber = obj => typeof obj === 'number';
@@ -13,6 +15,8 @@ export const isElement = obj => obj instanceof Element;
 export const isNodeList = obj => obj instanceof NodeList;
 
 export const isArray = obj => obj instanceof Array;
+
+export const isJQuery = obj => obj instanceof JQuery;
 
 export const isPlainObject = obj => typeof obj === 'object' && obj.constructor === Object && obj.toString() === '[object Object]';
 

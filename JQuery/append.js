@@ -1,4 +1,4 @@
-import { isFunction, isElement } from '../utils';
+import { isFunction, isElement, isJQuery } from '../utils';
 
 function appendChildElements(item, element) {
   if (isElement(element)) {
@@ -6,7 +6,7 @@ function appendChildElements(item, element) {
     return;
   }
 
-  if (element instanceof this) {
+  if (isJQuery(element)) {
     element.each(item.appendChild);
     return;
   }

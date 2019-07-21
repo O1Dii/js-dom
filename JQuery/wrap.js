@@ -1,5 +1,5 @@
 import {
-  isFunction, isString, isHTMLString, isElement, isNodeList, createElementFromHTML,
+  isFunction, isString, isHTMLString, isElement, isNodeList, createElementFromHTML, isJQuery,
 } from '../utils';
 
 function getWrapFromString(item, wrapper) {
@@ -31,7 +31,7 @@ function makeWrap(wrappingElement, item, index) {
     wrapper = getWrapFromString(item, wrapper);
   }
 
-  if (wrapper instanceof this || isNodeList(wrapper)) {
+  if (isJQuery(wrapper) || isNodeList(wrapper)) {
     wrapper = getWrapFromIterable(wrapper);
   }
 

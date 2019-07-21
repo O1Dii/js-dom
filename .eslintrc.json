@@ -17,6 +17,6 @@
     "rules": {
         "no-plusplus": "off",
         "no-param-reassign": "off",
-        "no-cycle": "off"
+        "import/no-cycle": "off"
     }
 }
