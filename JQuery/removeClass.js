@@ -12,13 +12,9 @@ function removeClass(classes) {
       return;
     }
 
-    if (item.className) {
-      const toRemoveClasses = passedClasses.split(' ').filter(className => className);
+    const toRemoveClasses = passedClasses.split(' ').filter(className => className);
 
-      item.className.remove(...toRemoveClasses);
-    }
-
-    item.className = item.className.trim();
+    item.className.remove(...toRemoveClasses);
   });
 
   return this;

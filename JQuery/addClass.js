@@ -12,13 +12,9 @@ function addClass(classes) {
       return;
     }
 
-    if (item.className) {
-      const newClasses = passedClasses.split(' ').filter(className => className);
+    const newClasses = passedClasses.split(' ').filter(className => className);
 
-      item.classList.add(...newClasses);
-    } else {
-      item.className = passedClasses;
-    }
+    item.classList.add(...newClasses);
   });
 
   return this;
