@@ -13,10 +13,10 @@ function addClass(classes) {
     }
 
     if (item.className) {
-      const existClasses = item.className.split(' ').filter(className => className);
+      const existClasses = item.classList;
       const newClasses = passedClasses.split(' ').filter(className => className);
 
-      item.className = uniq(existClasses, newClasses).join(' ');
+      existClasses.add(...newClasses);
     } else {
       item.className = passedClasses;
     }

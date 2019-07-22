@@ -13,10 +13,10 @@ function removeClass(classes) {
     }
 
     if (item.className) {
-      const existClasses = item.className.split(' ').filter(className => className);
+      const existClasses = item.className;
       const toRemoveClasses = passedClasses.split(' ').filter(className => className);
 
-      item.className = difference(existClasses, toRemoveClasses).join(' ');
+      existClasses.remove(...toRemoveClasses);
     }
 
     item.className = item.className.trim();

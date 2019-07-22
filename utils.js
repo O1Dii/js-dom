@@ -45,7 +45,3 @@ export const max = (arr) => {
 
   return arr.reduce((prev, cur) => ((prev === undefined || cur > prev) ? cur : prev), []);
 };
-
-export const uniq = (arr1, arr2) => [...new Set([...arr1, ...arr2])];
-
-export const difference = (arr1, arr2) => arr1.filter(element => !arr2.includes(element));
