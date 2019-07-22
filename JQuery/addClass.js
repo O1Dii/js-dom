@@ -13,10 +13,9 @@ function addClass(classes) {
     }
 
     if (item.className) {
-      const existClasses = item.classList;
       const newClasses = passedClasses.split(' ').filter(className => className);
 
-      existClasses.add(...newClasses);
+      item.classList.add(...newClasses);
     } else {
       item.className = passedClasses;
     }

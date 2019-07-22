@@ -13,10 +13,9 @@ function removeClass(classes) {
     }
 
     if (item.className) {
-      const existClasses = item.className;
       const toRemoveClasses = passedClasses.split(' ').filter(className => className);
 
-      existClasses.remove(...toRemoveClasses);
+      item.className.remove(...toRemoveClasses);
     }
 
     item.className = item.className.trim();
